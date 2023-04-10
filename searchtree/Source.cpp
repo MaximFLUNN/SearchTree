@@ -1,6 +1,6 @@
 #include <iostream>
-#include <stack>
 #include <vector>
+#include <stack>
 
 int count_digits(int num) {
     if (num == 0) {
@@ -23,13 +23,13 @@ private:
     Node* m_left;
     Node* m_right;
     int m_height;
-public:
+public:/*
     Node() {
         m_data = NULL;
         m_left = nullptr;
         m_right = nullptr;
         m_height = 0;
-    }
+    }*/
 
     Node(T date) {
         m_data = date;
@@ -42,11 +42,11 @@ public:
 
     // Вставка узла
     void insert(T date) {
-        if (this->m_data == NULL) {
+        /*if (this == nullptr) {
             m_data = date;
             m_left = nullptr;
             m_right = nullptr;
-        }
+        }*/
 
         // Проходим в нужное место и вставляет узел
         if (date < this->m_data) {
@@ -57,7 +57,7 @@ public:
                 m_left->insert(date);
             }
         }
-        else {
+        else if (date >= this->m_data) {
             if (m_right == nullptr) {
                 m_right = new Node(date);
             }
@@ -138,6 +138,18 @@ public:
         }
     }
 
+    Node* getMin() {
+        if (this == nullptr) { return this; }
+        if (this->m_left == nullptr) { return this; }
+        return this->m_left->getMin();
+    }
+
+    Node* getMax() {
+        if (this == nullptr) { return this; }
+        if (this->m_right == nullptr) { return this; }
+        return this->m_right->getMax();
+    }
+
     Node* minValueNode() {
         Node* current = this;
         while (current && current->m_left != nullptr) { current = current->m_left; }
@@ -146,43 +158,37 @@ public:
 
     // Удаление узла
     Node* deleteNode(T date) {
-        // Возвращаем, если дерево пустое
-        if (this == NULL) return this;
-
-        // Ищем узел, который хотим удалить
-        if (date < this->m_data) {
-            this->m_left = this->m_left->deleteNode(date);
-        }
-        else if (date > this->m_data) {
-            this->m_right = this->m_right->deleteNode(date);
-        }
+        if (this == nullptr) { return this; }
+        else if (date < this->m_data) { this->m_left = this->m_left->deleteNode(date); }
+        else if (date > this->m_data) { this->m_right = this->m_right->deleteNode(date); }
         else {
-            // Если у узла один дочерний элемент или их нет
-            if (this->m_left == NULL) {
-                Node* temp = this->m_right;
-                free(this);
-                return temp;
+            if (this->m_left == nullptr && this->m_right == nullptr) {
+                return nullptr;
             }
-            else if (this->m_right == NULL) {
-                Node* temp = this->m_left;
-                free(this);
-                return temp;
+            else if (this->m_left == nullptr || this->m_right == nullptr) {
+                *this = (this->m_left == nullptr) ? *this->m_right : *this->m_left;
             }
-
-            // Если у узла два дочерних элемента
-            Node* temp = this->m_right->minValueNode();
-
-            // Помещаем temp на место узла, который хотим удалить
-            this->m_data = temp->m_data;
-
-            // Удаляем
-            this->m_right = deleteNode(temp->m_data);
+            else {
+                Node<T>* maxInLeft = this->m_left->getMax();
+                this->m_data = maxInLeft->m_data;
+                this->m_right = this->m_right->deleteNode(maxInLeft->m_data);
+                this->m_left = this->m_left->deleteNode(maxInLeft->m_data);
+            }
         }
+
         if (this != nullptr) {
-            updateHeight();
-            Balance();
+            this->updateHeight();
+            this->Balance();
         }
         return this;
+    }
+
+    int getHeight() {
+        return this == nullptr ? -1 : this->m_height;
+    }
+
+    void updateHeight() {
+        this->m_height = std::max(this->m_left->getHeight(), this->m_right->getHeight()) + 1;
     }
 
     int height(Node<T>* root) {
@@ -191,33 +197,14 @@ public:
         return std::max(height(root->m_left), height(root->m_right)) + 1;
     }
 
-    void updateHeight() {
-        m_height = (m_left ? m_left->m_height : 0) + (m_right ? m_right->m_height : 0) + 1;
-    }
-
     int balanceFactor() {
-        if (this == nullptr) { return 0; }
-        int l_height = height(this->m_left);
-        int r_height = height(this->m_right);
-        return r_height - l_height;
+        return (this == nullptr) ? 0 : this->m_right->getHeight() - this->m_left->getHeight();
     }
 
     void swapData(Node<T>* node) {
         T temp = node->m_data;
         node->m_data = this->m_data;
         this->m_data = temp;
-    }
-
-    void RotateLeft() {
-        this->swapData(this->m_right);
-        Node<T>* buffer = this->m_left;
-        this->m_left = this->m_right;
-        if (this->m_left->m_right != nullptr) { this->m_right = this->m_left->m_right; }
-        if (this->m_right->m_right != nullptr) { this->m_right->m_left = this->m_right->m_right; }
-        this->m_left->m_right = this->m_left->m_left;
-        this->m_left->m_left = buffer;
-        this->m_left->updateHeight();
-        this->updateHeight();
     }
 
     void RotateRight() {
@@ -231,15 +218,29 @@ public:
         this->updateHeight();
     }
 
-    void Balance() {
-        this->updateHeight();
-        if (this->balanceFactor() == 2) {
-            if (this->m_right->balanceFactor() == -1) { this->m_right->RotateRight(); }
-            this->RotateLeft();
+    void RotateLeft() {
+        this->swapData(this->m_right);
+        Node<T>* buffer = this->m_left;
+        this->m_left = this->m_right;
+        this->m_right = this->m_left->m_right;
+        if (this->m_right != nullptr) {
+            //this->m_right->m_left = this->m_right->m_right;
         }
-        else if (this->balanceFactor() == -2) {
-            if (this->m_left->balanceFactor() == 1) { this->m_left->RotateLeft(); }
+        this->m_left->m_right = this->m_left->m_left;
+        this->m_left->m_left = buffer;
+        this->m_left->updateHeight();
+        this->updateHeight();
+    }
+
+    void Balance() {
+        int balance = this->balanceFactor();
+        if (balance == -2) {
+            if (this->m_left->balanceFactor() == 1) this->m_left->RotateLeft();
             this->RotateRight();
+        }
+        else if (balance == 2) {
+            if (this->m_right->balanceFactor() == -1) this->m_right->RotateLeft();
+            this->RotateLeft();
         }
     }
 
@@ -314,6 +315,15 @@ public:
 };
 
 int main() {
+
+    int pin = 0;
+
+    std::cout << "Print pin: ";
+    std::cin >> pin;
+    if (pin != 2213) {
+        return -1;
+    }
+
     std::cout << "||||||||||||||||||||||||||||||||||\n|||     New gen (recursive)    |||\n||||||||||||||||||||||||||||||||||\n";
 
     Node<int> rt(8);
@@ -381,48 +391,92 @@ int main() {
     std::cout << "\n||||||||||||||||||||||||||||||||||\n|||  New gen (Vertical print)  |||\n||||||||||||||||||||||||||||||||||\n";
      
     Node<int> rt4(8);
-    /*rt4.insert(3);
-    rt4.insert(1);
-    rt4.insert(6);
-    rt4.insert(7);
-    rt4.insert(10);
-    rt4.insert(14);
-    rt4.insert(4);
-    rt4.insert(13);
-    rt4.insert(16);
-    rt4.insert(18);
-    rt4.insert(15);
-    rt4.insert(-1);
-    rt4.insert(2);
-    rt4.insert(5);*/
     rt4.insert(9);
     rt4.insert(10);
     rt4.insert(11);
     rt4.insert(12);
     rt4.insert(13);
     rt4.insert(14);
-    /*rt4.insert(5);
-    rt4.insert(4);
-    rt4.insert(3);
-    rt4.insert(2);
-    rt4.insert(1);*/
-
-    /*std::cout << "Tree: ";
-    rt4.inorder_non_stack_non_recursive();
-
-    std::cout << "\nDel 10\n";
-    rt4.deleteNode(10);
-
-    std::cout << "Tree: ";
-    rt4.inorder_non_stack_non_recursive();*/
 
     std::cout << "\n";
     system("pause");
     system("cls");
     rt4.TreePrinter();
-    std::cout << "\n|||||||||||||||||||||||||||||||||||\n";
+    std::cout << "\n |||||Del 10|||||\n";
     rt4.deleteNode(10);
-    //rt4.deleteNode(13);
 
     rt4.TreePrinter();
+
+    std::cout << "\n |||||Del 13|||||\n";
+    rt4.deleteNode(13);
+
+    rt4.TreePrinter();
+
+    std::cout << "\n";
+    system("pause");
+    system("cls");
+
+    std::cout << "\n||||||||||||||||||||||||||||||||||\n||| New gen 2 (Vertical print) |||\n||||||||||||||||||||||||||||||||||\n";
+
+    Node<int> rt5(8);
+    rt5.insert(3);
+    rt5.insert(1);
+    rt5.insert(6);
+    rt5.insert(7);
+    rt5.insert(10);
+    rt5.insert(14);
+    rt5.insert(4);
+    rt5.insert(13);
+    rt5.insert(16);
+    rt5.insert(18);
+    rt5.insert(15);
+    rt5.insert(0);
+    rt5.insert(2);
+    rt5.insert(5);
+
+    std::cout << "\n";
+    system("pause");
+    system("cls");
+    rt5.TreePrinter();
+    std::cout << "\n ||||||||||||Del 10 |||||||||||||||\n";
+    rt5.deleteNode(10);
+
+    rt5.TreePrinter();
+
+    std::cout << "\n ||||||||||||Del 8 |||||||||||||||\n";
+    rt5.deleteNode(8);
+
+    rt5.TreePrinter();
+
+    std::cout << "\n ||||||||||||Del 13|||||||||||||||\n";
+    rt5.deleteNode(13);
+
+    rt5.TreePrinter();
+
+    std::cout << "\n";
+    system("pause");
+    system("cls");
+
+    std::cout << "\n||||||||||||||||||||||||||||||||||\n||| New gen 3 (Vertical print) |||\n||||||||||||||||||||||||||||||||||\n";
+
+    Node<int> rt6(8);
+
+    rt6.insert(-1);
+    rt6.insert(-100);
+    rt6.insert(-50);
+    rt6.insert(-200);
+    rt6.insert(400);
+    rt6.insert(600);
+    rt6.insert(1600);
+    rt6.insert(21600);
+    rt6.insert(-21600);
+
+    std::cout << "\n";
+    system("pause");
+    system("cls");
+    rt6.TreePrinter();
+
+    std::cout << "\n";
+    system("pause");
+    system("cls");
 }

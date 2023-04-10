@@ -1,0 +1,15 @@
+﻿  Source.cpp
+D:\StudioProject\searchtree\searchtree\Source.cpp(305,1): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+D:\StudioProject\searchtree\searchtree\Source.cpp(262): message : во время компиляции функции-члена класс шаблон "void Node<int>::TreePrinter(void)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(404): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::TreePrinter(void)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(329): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "Node<int>"
+D:\StudioProject\searchtree\searchtree\Source.cpp(258,40): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+D:\StudioProject\searchtree\searchtree\Source.cpp(253): message : во время компиляции функции-члена класс шаблон "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(271): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(259,41): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+  Создание кода
+  1 of 257 functions ( 0.4%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    0 functions had inline decision re-evaluated but remain unchanged
+  Создание кода завершено
+  searchtree.vcxproj -> D:\StudioProject\searchtree\x64\Release\searchtree.exe

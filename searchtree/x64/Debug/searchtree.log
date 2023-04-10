@@ -1,10 +1,10 @@
 ﻿  Source.cpp
-D:\StudioProject\searchtree\searchtree\Source.cpp(304,1): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-D:\StudioProject\searchtree\searchtree\Source.cpp(261): message : во время компиляции функции-члена класс шаблон "void Node<int>::TreePrinter(void)"
-D:\StudioProject\searchtree\searchtree\Source.cpp(422): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::TreePrinter(void)"
-D:\StudioProject\searchtree\searchtree\Source.cpp(319): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "Node<int>"
-D:\StudioProject\searchtree\searchtree\Source.cpp(257,40): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
-D:\StudioProject\searchtree\searchtree\Source.cpp(252): message : во время компиляции функции-члена класс шаблон "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
-D:\StudioProject\searchtree\searchtree\Source.cpp(270): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
-D:\StudioProject\searchtree\searchtree\Source.cpp(258,41): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+D:\StudioProject\searchtree\searchtree\Source.cpp(305,1): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+D:\StudioProject\searchtree\searchtree\Source.cpp(262): message : во время компиляции функции-члена класс шаблон "void Node<int>::TreePrinter(void)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(404): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::TreePrinter(void)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(329): message : выполняется компиляция ссылки на экземпляр класс шаблон функции "Node<int>"
+D:\StudioProject\searchtree\searchtree\Source.cpp(258,40): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
+D:\StudioProject\searchtree\searchtree\Source.cpp(253): message : во время компиляции функции-члена класс шаблон "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(271): message : выполняется компиляция ссылки на экземпляр шаблон функции "void Node<int>::printTree(int **,Node<int> *,int,int,int,int **)"
+D:\StudioProject\searchtree\searchtree\Source.cpp(259,41): warning C4244: аргумент: преобразование "double" в "int", возможна потеря данных
   searchtree.vcxproj -> D:\StudioProject\searchtree\x64\Debug\searchtree.exe
